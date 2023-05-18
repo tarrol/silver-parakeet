@@ -1,4 +1,17 @@
-# Getting Started with Create React App
+# Silver Parakeet
+This is a movie database app created with npx create-react-app, with a typescript template. The project will interact with an AWS MySQL server to read and write data.
+
+
+## Features
+-Users
+-Search feature
+-Admin
+-Comments
+-Ratings
+-Multiple Views
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
