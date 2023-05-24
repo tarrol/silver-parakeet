@@ -1,9 +1,14 @@
 import express from 'express';
 // import mysql from 'mysql'
-import { QueryTypes, Sequelize } from 'sequelize';
+import { ArrayDataType, QueryTypes, Sequelize } from 'sequelize';
 // import { viewMovies } from './dbfunctions';
+const cors = require('cors')
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 const sqlCon = new Sequelize('movie_db', 'root', 'rootroot', { host: 'localhost', dialect: 'mysql', port: 3306, });
 
@@ -23,19 +28,25 @@ app.listen(3001, () => console.log('Now listening on port 3001'));
 var moviesList: any = [];
 var userSearch = "Dungeons & Dragons"
 
-async function createMoviesList(movieName: string) {
-  await sqlCon.query(`SELECT * FROM movies WHERE movie_name LIKE '%${movieName}%';`, { type: QueryTypes.SELECT })
-    .then((res) => { moviesList = res })
-    .then(() => {
-      console.log('Movies list updated: ')
-      console.log('Movie | Rating')
-      for (let i = 0; i < moviesList.length; i++) {
-        console.log(moviesList[i].movie_name + ", " + moviesList[i].movie_rating + "/5")
-      }
-    }
-    )
+async function createMoviesList() {
+  await sqlCon.query(`SELECT * FROM movies;`, { type: QueryTypes.SELECT })
+  // await sqlCon.query(`SELECT * FROM movies WHERE movie_name LIKE '%${movieName}%';`, { type: QueryTypes.SELECT })
+    .then((res) => { moviesList = res; return moviesList; })
+    // .then(() => {
+    //   // console.log('Movies list updated: ')
+    //   // console.log('Movie | Rating')
+    //   for (let i = 0; i < moviesList.length; i++) {
+    //     console.log(moviesList[i].movie_name + ", " + moviesList[i].movie_rating + "/5")
+    //   }
+    // }
+    // )
 }
-createMoviesList(userSearch)
+
+  app.get("/", function (req, res) {
+    console.log("Request received")
+    createMoviesList().then(() => { console.log(moviesList); res.json(moviesList) ;})
+    // res.json(moviesList)
+  })
 
 
 // async function resolveMovie(userSearch:string){
