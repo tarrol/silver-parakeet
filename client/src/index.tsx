@@ -7,8 +7,8 @@ import './App.css'
 //Import Components
 import Home from './components/Home';
 import New from './components/New';
-import Delete from './components/Delete';
 import Update from './components/Update';
+import Movie from './components/Movie';
 
 
 const root = ReactDOM.createRoot(
@@ -20,8 +20,8 @@ root.render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/movies/new" element={<New />} />
-        <Route path="/movies/delete" element={<Delete />} />
-        <Route path="/movies/update" element={<Update />} />
+        <Route path="/movies/update/:id" element={<Update />} />
+        <Route path="/movies/:id" element={<Movie />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

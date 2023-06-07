@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [movies, setMovies] = useState<any[]>([]);
@@ -17,19 +18,38 @@ function Home() {
     fetchAllMovies();
   }, []);
 
+  //Delete a movie
+  const handleDelete = async (movie: any) => {
+    if (window.confirm(`Are you sure you want to delete ${movie.m_title}?`)){
+    try {
+      await axios.delete(`http://localhost:3001/movies/delete/${movie.m_id}`);
+      window.location.reload();
+    }
+    catch (error) {
+      console.error(error)
+    }
+    }
+    return;
+  }
+
+
+
   return (
     <div className="Home">
-      <h1>Welcome.</h1>
+      <h1>Welcome. You have {movies.length} movies in your collection.</h1>
+      <div>
+        <button><Link to="/movies/new">Add a movie</Link></button>
+      </div>
       <div className="movies">
         {movies.map((movie) => (
           <div className="movie" key={movie.m_id}>
-            <h2>{movie.m_title}</h2>
+            <h2><Link to={`/movies/${movie.m_id}`}>{movie.m_title}</Link></h2>
             <a>Rated {movie.r_rating}</a>
             <h3>Synopsis: </h3>
             <p>{movie.m_description}</p>
-            <p>Directed by: {movie.m_director}</p>
-            <p>Run time: {movie.m_run_time} minutes.</p>
-            <p>Originally released: {movie.m_year}</p>
+            <button className="delete" onClick={() => handleDelete(movie)}>Delete
+              </button>
+            <button className="update"><Link to={`/movies/update/${movie.m_id}`}>Update</Link></button>
           </div>
         ))}
       </div>
